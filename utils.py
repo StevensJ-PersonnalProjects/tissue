@@ -14,23 +14,21 @@ except: pass
 
 from . import config
 
+# replace ".preferences.keys()" to " getattr()" func, according to : https://github.com/alessandro-zomparelli/tissue/issues/183
 def use_numba_tess():
     tissue_addon = bpy.context.preferences.addons[__package__]
-    if 'use_numba_tess' in tissue_addon.preferences.keys():
-        return tissue_addon.preferences['use_numba_tess']
-    else:
-        return True
+    return getattr(tissue_addon.preferences, 'use_numba_tess', True)    
 
+# replace ".preferences.keys()" to " getattr()" func, according to : https://github.com/alessandro-zomparelli/tissue/issues/183
 def tissue_time(start_time, name, levels=0):
     tissue_addon = bpy.context.preferences.addons[__package__]
     end_time = time.time()
-    if 'print_stats' in tissue_addon.preferences.keys():
-        ps = tissue_addon.preferences['print_stats']
-    else:
-        ps = 1
+    ps = getattr(tissue_addon.preferences, 'print_stats', 1)
     if levels < ps:
-        if "Tissue: " in name: head = ""
-        else: head = "        "
+        if "Tissue: " in name: 
+            head = ""
+        else: 
+            head = " "
         if start_time:
             print('{}{}{} in {:.4f} sec'.format(head, "|   "*levels, name, end_time - start_time))
         else:
